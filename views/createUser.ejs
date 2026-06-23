@@ -1,0 +1,23 @@
+<!-- new.ejs -->
+
+<html>
+  <head>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <h1>This is new message</h1>
+    <nav>
+        <%- include('navbar', {}) %>
+    </nav>
+  <h1><%= title %></h1>
+  <%- include("partials/errors.ejs") %>
+  <form action="/create" method="POST">
+    <label for="firstName">First Name: </label>
+    <input type="text" name="firstName" id="firstName" required>
+    <label for="lastName">Last Name: </label>
+    <input type="text" name="lastName" id="lastName" required>
+    <button type="submit">Submit</button>
+  </form>
+  <a href="/">Back to home</a>
+  </body>
+</html>
