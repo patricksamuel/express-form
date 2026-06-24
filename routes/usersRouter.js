@@ -8,6 +8,8 @@ const usersController = require("../controllers/usersController");
 router.get("/", usersController.usersListGet)
 router.get("/create", usersController.usersCreateGet)
 router.post("/create", usersController.usersCreatePost)
+router.get("/search", usersController.usersSearchGet)
+
 
 
 router.get("/:id/update", usersController.usersUpdateGet);

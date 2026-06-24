@@ -9,6 +9,9 @@ const { body, validationResult, matchedData} = require("express-validator")
 //matchedData(req)    → give me the clean values       (the cleaned result)
 const alphaErr = "must only contain letters"
 const lengthErr = "must be between 1 and 10 characters"
+const emailErr = "not an email"
+const ageErr = "must be between 18 and 120"
+
 
 exports.usersListGet = (req,res) => {
     res.render("index",{
@@ -33,6 +36,10 @@ const validateUser = [
   body("lastName").trim()
     .isAlpha().withMessage(`Last name ${alphaErr}`)
     .isLength({ min: 1, max: 10 }).withMessage(`Last name ${lengthErr}`),
+  body("email").trim()
+    .isEmail().withMessage(`${emailErr}`),
+  body("age").trim()
+    .isInt({min: 18, max: 120}).withMessage(`${ageErr}`)
 ]; // a function to validate the format of user
 
 exports.usersCreatePost = [
@@ -45,8 +52,8 @@ exports.usersCreatePost = [
         errors: errors.array(),
       });
     }
-    const { firstName, lastName } = matchedData(req);
-    usersStorage.addUser({ firstName, lastName });
+    const { firstName, lastName, email, age } = matchedData(req);
+    usersStorage.addUser({ firstName, lastName, email, age });
     res.redirect("/");
   }
 ];
@@ -71,8 +78,8 @@ exports.usersUpdatePost = [
         errors: errors.array(),
       });
     }
-    const { firstName, lastName } = matchedData(req);
-    usersStorage.updateUser(req.params.id, { firstName, lastName });
+    const { firstName, lastName, email, age } = matchedData(req);
+    usersStorage.updateUser(req.params.id, { firstName, lastName, email, age});
     res.redirect("/");
   }
 ];
@@ -82,3 +89,12 @@ exports.usersDeletePost = (req, res) => {
   res.redirect("/");
 };
 
+exports.usersSearchGet = (req, res) => {
+  console.log(`first name ${req.query.firstName}`)
+  const users = usersStorage.getUsersSearch(req.query.firstName, req.query.email);
+  console.log(`users search ${users}`)
+  res.render("search", {
+    title: "user search",
+    users: users,
+  });
+};

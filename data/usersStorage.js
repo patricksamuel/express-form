@@ -3,9 +3,9 @@ class UsersStorage{
         this.storage={};
         this.id = 0;
     }
-    addUser({firstName,lastName}){
+    addUser({firstName,lastName, email, age}){
         const id = this.id;
-        this.storage[id] = {id,firstName,lastName}
+        this.storage[id] = {id,firstName,lastName, email, age}
         this.id++;
         console.log("AFTER ADD:", this.storage)
     }
@@ -16,12 +16,27 @@ class UsersStorage{
     getUser(id) {
         return this.storage[id]
     }
-    updateUser(id, {firstName,lastName}) {
-        this.storage[id] = {id, firstName, lastName}
+    updateUser(id, {firstName,lastName, email, age}) {
+        this.storage[id] = {id,firstName,lastName, email, age}
     }
     deleteUser(id){
         delete this.storage[id];
     }
+    getUsersSearch(firstNameQuery,emailQuery){
+        const users = this.getUsers()
+        const results = users.filter(user => {
+            const matchFirst = firstNameQuery
+                ? user.firstName.toLowerCase().includes(firstNameQuery.toLowerCase())
+                : false;
+            const matchEmail = emailQuery
+                ? user.email.toLowerCase().includes(emailQuery.toLowerCase())
+                : false;
+            return matchEmail || matchFirst;
+            
+        })
+        return results;
+    }
+
 }
 
 module.exports= new UsersStorage()
